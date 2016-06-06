@@ -169,11 +169,11 @@ Tips：
 ##实数类型
 在 mysql 中 float、double（或 real）是浮点数，decimal（或 numberic）是定点数。
 浮点数相对于定点数的优点是在长度一定的情况下，浮点数能够表示更大的数据范围；它的缺点是会引起精度问题。
-```不确定因数案例1```浮点数和定点数的区别：
+浮点数和定点数的区别：
 ![enter image description here](http://a1.qpic.cn/psb?/V11ViYzL3kHi5M/xFeT0ty44vtJAMX30Qk2KMiOahVdBS6Z*6lBhykIvXI!/b/dAIBAAAAAAAA&bo=OAS6AQAAAAAFB6M!&rf=viewer_4 "float_2")
 我们看到 c1 列的值由 131072.32 变成了 131072.31，这就是浮点数的
 不精确性造成的。浮点型数据的误差问题，不管是MySQL，或者其余编程语言，必须考虑的一个问题。
-```不确定因素案例2```消失的数据
+消失的数据
 ![enter image description here](http://a1.qpic.cn/psb?/V11ViYzL3kHi5M/BA3pbmEDWM2g99UKaRNVc1PZOhxxnpPKctwmc.vJPr8!/b/dP8AAAAAAAAA&bo=VANIAgAAAAAFBzk!&rf=viewer_4 "float")
 单独查询一条数据时，查询结果出现Empty set
 Tips：
@@ -204,6 +204,7 @@ Tips:
 2. 当列的最大长度比平均长度大很多，并且列很少更新的时候用vachar合适（碎片问题） 
 3. 用tinyint类型代替enum类型，enum如果需要新增枚举的话，得全表更新，set也不要用
 ##日期和时间类型
+
 ![enter image description here](http://a2.qpic.cn/psb?/V11ViYzL3kHi5M/Uatg0CC4yneic9U6cbjajFH5jrGv1V4YdGVbrfKuJuU!/b/dK8AAAAAAAAA&bo=cQOAAgAAAAAFB9Q!&rf=viewer_4 "date")
 Tips:
 1. 时间，年：year，日期：date，时间：建议datetime（美丽说dba），尽量用timestamp类型更好
@@ -300,6 +301,7 @@ MyISAM表支持空间索引，可以用做地理数据存储。和B-Tree索引�
  
  - 使用字段选择性高的的字段来建立索引
   show index from table 查看表上的索引。
+```
  <table>
 <tr>
 <th>Table</th>
@@ -349,6 +351,7 @@ MyISAM表支持空间索引，可以用做地理数据存储。和B-Tree索引�
 </tr>
 </tbody>
 </table>
+```
 索引选择性=索引列唯一值/表记录数；
 选择性较低索引 可能带来的性能问题
 选择性越高索引检索价值越高，消耗系统资源越少；选择性越低索引检索价值越低，消耗系统资源越多；
@@ -393,6 +396,7 @@ MySQL查询分析器EXPLAIN或DESC
  explain select * from article a where a.author_id in (select author_id from user);   —— 表示select查询语句的查询计划
  
  - **每列的含义**
+ ```
 <table>
 <tr>
 <th>id</th>
@@ -533,7 +537,7 @@ Using sort_union(...), Using union(...), Using intersect(...):这些函数说明
 Using index for group-by:类似于访问表的Using index方式,Using index for group-by表示MySQL发现了一个索引,可以用来查 询GROUP BY或DISTINCT查询的所有列,而不要额外搜索硬盘访问实际的表。<br/><br/></td>
 </tr>
 </table>
-
+```
 #并发控制（锁）
 ## 一、MySQL中的锁（表锁、行锁） ##
 **背景：**
@@ -810,7 +814,7 @@ ANSI/ISO SQL标准定义了4中事务隔离级别：未提交读（read uncommit
 ####7、数据库中的默认事务隔离级别
 在Oracle中默认的事务隔离级别是提交读（read committed）。
 对于MySQL的Innodb的默认事务隔离级别是重复读（repeatable read）。可以通过下面的命令查看：		
-
+```
 	mysql -h10.8.3.29 -P3337 -umlstmpdb -p****
 	mysql> SELECT @@GLOBAL.tx_isolation,@@tx_isolation;
 	+———————–+—————–+
@@ -839,7 +843,7 @@ ANSI/ISO SQL标准定义了4中事务隔离级别：未提交读（read uncommit
 	+---------------+----------------+
 	1 row in set (0.00 sec)
 	mysql>
-
+```
 ####8、数据库中事务的种类
 
  1. 扁平事务；（应用场景中用的比较多的）
@@ -919,7 +923,7 @@ XA事务允许不同数据库之间的分布式事务，如：一台服务器是
 分布式事务使用两段式提交（two-phase commit）的方式。在第一个阶段，所有参与全局事务的节点都开始准备，告诉事务管理器它们准备好提交了。第二个阶段，事务管理器告诉资源管理器执行rollback或者commit，如果任何一个节点显示不能commit，那么所有的节点就得全部rollback。
 
 **注：**参数innodb_support_xa可以查看是否启用了XA事务支持（主库默认为ON）：
-
+```
 	mysql> show variables like 'innodb_support_xa';
 	+-------------------+-------+
 	| Variable_name     | Value |
@@ -939,7 +943,7 @@ XA事务允许不同数据库之间的分布式事务，如：一台服务器是
 	| innodb_support_xa | ON    |
 	+-------------------+-------+
 	1 row in set (0.01 sec)
-
+```
 建议：主库开启innodb_support_xa=1，从库不开（因为从库一般不会记binlog），数据一致性还是很重要的。
 
 课外拓展：
