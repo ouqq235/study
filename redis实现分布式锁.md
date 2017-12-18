@@ -1,7 +1,6 @@
 # Redis实现分布式锁
 
-* author : yongfeimiao
-* date : 2015.12.02
+
 
 ## 1、原理图展示
 
