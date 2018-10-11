@@ -202,10 +202,8 @@ Tips:
 
 ![enter image description here](http://a2.qpic.cn/psb?/V11ViYzL3kHi5M/Uatg0CC4yneic9U6cbjajFH5jrGv1V4YdGVbrfKuJuU!/b/dK8AAAAAAAAA&bo=cQOAAgAAAAAFB9Q!&rf=viewer_4 "date")
 Tips:
-1. 时间，年：year，日期：date，时间：建议datetime（美丽说dba），尽量用timestamp类型更好
+1. 时间，年：year，日期：date，时间：尽量用timestamp类型更好
 
-## 商家后台MySQL开发规范-表设计篇
-https://github.com/meilishuo-group/Mysql-manual/blob/master/MySQL%E5%BB%BA%E8%A1%A8%E8%A7%84%E8%8C%83.md
 
 #索引引进
 
