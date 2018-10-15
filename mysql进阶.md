@@ -125,49 +125,52 @@
  * （1）熟悉数据存储的空间结构
  *  （2）什么是MySQL插件式的存储引擎
  * （2）存储引擎的原理、存储引擎的选择
-###存储引擎在MySQL架构中的位置
+### 存储引擎在MySQL架构中的位置
 ![enter image description here](http://b260.photo.store.qq.com/psb?/ed2bc575-473b-4fd0-b52e-fd97291fe793/8H8UxgpAP8SOk6vASl87RvA5F5kXLe0w75.CkaVdNTc!/c/dAQBAAAAAAAA&bo=QgKKAUICigEDACU! "mysql_clu")
 
-1 Connectors指的是不同语言中与SQL的交互
-2 Management Serveices & Utilities： 系统管理和控制工具
-3 Connection Pool: 连接池，权限验证
-4 SQL Interface: SQL接口
-5 Parser: 解析器
-6 Optimizer: 查询优化器。
-7 Cache和Buffer： 查询缓存。
-8 Engine ：存储引擎。
-存储引擎是在MySQL中是对接存储的一种实现，有的存储引擎将数据存储到内存，有的存储引擎将数据存储到文件
-###MySQL存储引擎特点
-####MyISAM
+1.Connectors指的是不同语言中与SQL的交互
+2.Management Serveices & Utilities： 系统管理和控制工具
+3.Connection Pool: 连接池，权限验证
+4.SQL Interface: SQL接口
+5.Parser: 解析器
+6.Optimizer: 查询优化器。
+7.Cache和Buffer： 查询缓存。
+8.Engine ：存储引擎。
+存储引擎是MySql中具体的与文件打交道的子系统。也是Mysql最具有特色的一个地方。
+Mysql的存储引擎是插件式的。它根据MySql AB公司提供的文件访问层的一个抽象接口来定制一种文件访问机制（这种访问机制就叫存储引擎）。现在有很多种存储引擎，各个存储引擎的优势各不一样，最常用的InnoDB,BDB,MyISAM,。
+默认下MySql是使用 Innodb 引擎( mysql 5.5.5以前的版本默认存储引擎是 Myisam )，它查询速度快，有较好的索引优化和数据压缩技术。但是它支持事务。
+Mysql也支持自己定制存储引擎，甚至一个库中不同的表使用不同的存储引擎，这些都是允许的。
+### MySQL存储引擎特点
+#### MyISAM
 1. MyISAM不支持事务，也不支持外键，优势在于访问速度快，应用场景是以insert和select为主的事务完整性要求没那么高的应用
 2. MyISAM实现的是表级锁
 每个MyISAM表在磁盘中存储成3个文件，文件名和表名相同。dbname.frm(存储表定义)，dbname.MYD(存储数据)，dbname.MYI(存储索引)
 3. MyISAM表有3种存储格式：静态表，动态表，压缩表。
-####InnoDB
+#### InnoDB
 1. InnoDB存储引擎提供了具有提交，回滚，和奔溃恢复能力的事务安全。但是相对于MyISAM而言，InnoDB写的处理效率要低得多。
 2. 外键约束，MySQL支持外键的只有InnoDB。
 3. InnoDB实现的是行级锁
 4. 多版本并发控制（MVCC）实现高并发支持，实现了SQL标准中四种隔离级别
-####MEMORY
+#### MEMORY
 1. MEMORY存储引擎使用存在内存中的内容来创建表。每个MEMORY表实际对应一个磁盘文件，格式.frm。MEMORY表的访问速度非常快，因为数据是放在内存中的，但是一旦服务关闭，表中的数据就会丢失。
 2. MEMORY类型存储引擎主要用于那些内容变化不频繁的代码表，或者作为统计操作的中间结果表，便于高效得对中间结果表进行分析并取得最终统计结果
 3. 特别注意，MEMORY存储数据是不会写到磁盘中的，但是可以在启动的时候使用--init-file选项，把insert into...select 或者load data infile这样的语句放入到这个文件中，就可以在启动MySQL的时候装载表
 4. 表级别锁，不支持Text类型
-####ARCHIVE
+#### ARCHIVE
 1. 只提供insert和select操作
 2. 近乎1：10的压缩性能
 3. 行级别锁实现高并发插入
 4. 很适合日志归档性存储需求
-####MERGE
+#### MERGE
 1. MERGE存储引擎是一组MyISAM表的集合，这些MyISAM表结构完全相同。MERGE表本身没有数据，但是对MERGE表可以进行查询，更新，删除操作，这些操作实际上是针对内部的MyISAM表进行的。
 2. MERGE表的创建只需要联合两张或者多张MyISAM表。
 create table payment_all(和子表一样的表结构)engine=merge union=(payment_2006,payment_2007) insert_method=last;
-#数据类型特点及优缺点
-##举个例子
+# 数据类型特点及优缺点
+## 举个例子
 ![enter image description here](http://a1.qpic.cn/psb?/V11ViYzL3kHi5M/7Abu.UHCssNhwOjSqPM0ZI3uxNG*DEigYd2w6TXNojk!/b/dK4AAAAAAAAA&bo=zgSAAgAAAAAFB2w!&rf=viewer_4 "mysql-type")
 这个例子中同样的SQL，执行效率相差千倍
 为什么会产生这样的问题，怎么样去预防？
-##整数类型
+## 整数类型
 ![enter image description here](http://a1.qpic.cn/psb?/V11ViYzL3kHi5M/JadsVy.ZEN5cUrBWOKczu07HEwCPyF3AOPNMXKbiIXI!/b/dAIBAAAAAAAA&bo=VgSAAgAAAAAFB*Q!&rf=viewer_4 "int")
 误区：
 int(size)之类的定义是没有意义的，对一些MySQL交互工具而言，size的作用是结合zerofill用来显示size宽度，对于数值范围和存储来说，int(1)和int(10)的一样的
@@ -177,7 +180,7 @@ Tips：
 2. 选择合适的整数类型，在合适的基础上，越小越好
 3. 必要时，指定为unsigned，存储数值范围可提升近一倍
 4. ip存储伪int类型，IP转数字函数inet_aton()，数字转IP函数inet_ntoa()，存储，效率将提升
-##实数类型
+## 实数类型
 在 mysql 中 float、double（或 real）是浮点数，decimal（或 numberic）是定点数。
 浮点数相对于定点数的优点是在长度一定的情况下，浮点数能够表示更大的数据范围；它的缺点是会引起精度问题。
 浮点数和定点数的区别：
