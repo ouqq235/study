@@ -32,7 +32,7 @@
  *需要确保数据表中的每一列数据都和主键直接相关，而不能间接相关。*
 
 
-##第一范式
+## 第一范式
 1NF是关系型数据库的基本要求，也就是说，在关系型数据库中，比如MySQL，只要表的实际符合业务需求，那么表就符合1NF。比如下面这张表的设计符合1NF，ID，姓名，学生编号组成，并且满足业务需求：
 ```
 |ID|姓名|学生编号|
@@ -54,7 +54,7 @@
 1. 数据冗余，商品分类信息大量重复
 2. 修改异常，假如要修改BJ这个缩写改成小写形式，改动量很大
 
-##第二范式
+## 第二范式
 如果刚好业务场景决定我们的商品类目经常变动，那么显然1NF的种种缺点将暴露出来，这个时候可以通过范式升级，升级到2NF来解决这些问题。太简单的表没办法升级到2NF，比如一个系统就做一个收录员工姓名这一件事情，然后就一个name表，name表里就两列字段，ID和姓名，这种表只能符合1NF。所以为了介绍2NF，随手建一个符合1NF的复杂一点的表如下：
 
 |商品ID|商品名称|颜色|价格|商家名字|商家联系方式|
@@ -128,14 +128,14 @@
 ### 存储引擎在MySQL架构中的位置
 ![enter image description here](http://b260.photo.store.qq.com/psb?/ed2bc575-473b-4fd0-b52e-fd97291fe793/8H8UxgpAP8SOk6vASl87RvA5F5kXLe0w75.CkaVdNTc!/c/dAQBAAAAAAAA&bo=QgKKAUICigEDACU! "mysql_clu")
 
-1.Connectors指的是不同语言中与SQL的交互
-2.Management Serveices & Utilities： 系统管理和控制工具
-3.Connection Pool: 连接池，权限验证
-4.SQL Interface: SQL接口
-5.Parser: 解析器
-6.Optimizer: 查询优化器。
-7.Cache和Buffer： 查询缓存。
-8.Engine ：存储引擎。
+1. Connectors指的是不同语言中与SQL的交互
+2. Management Serveices & Utilities： 系统管理和控制工具
+3. Connection Pool: 连接池，权限验证
+4. SQL Interface: SQL接口
+5. Parser: 解析器
+6. Optimizer: 查询优化器。
+7. Cache和Buffer： 查询缓存。
+8. Engine ：存储引擎。
 存储引擎是MySql中具体的与文件打交道的子系统。也是Mysql最具有特色的一个地方。
 Mysql的存储引擎是插件式的。它根据MySql AB公司提供的文件访问层的一个抽象接口来定制一种文件访问机制（这种访问机制就叫存储引擎）。现在有很多种存储引擎，各个存储引擎的优势各不一样，最常用的InnoDB,BDB,MyISAM,。
 默认下MySql是使用 Innodb 引擎( mysql 5.5.5以前的版本默认存储引擎是 Myisam )，它查询速度快，有较好的索引优化和数据压缩技术。但是它支持事务。
