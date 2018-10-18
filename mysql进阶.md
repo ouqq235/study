@@ -397,7 +397,7 @@ select count(distinct twitter_id)/count(*) as twitter_count , count(distinct aid
 LIMIT和OFFSET的问题，其实就是OFFSET的问题，它会导致M有SQL扫描大量不需要的行然后再抛弃掉。如果可以使用书签记录上次取数据的位置，那么下次就可以直接从该书签记录的位置开始扫描，这样就可以避免使用OFFSET。
 该技术的好处是，无论翻页到多么后面，其性能都会很好！
 
-#查询性能优化&分析方式
+# 查询性能优化&分析方式
 MySQL查询分析器EXPLAIN或DESC
 -------
  - **EXPLAIN描述**
@@ -408,7 +408,7 @@ MySQL查询分析器EXPLAIN或DESC
  explain select * from article a where a.author_id in (select author_id from user);   —— 表示select查询语句的查询计划
  
  - **每列的含义**
- ```
+ ```html
 <table>
 <tr>
 <th>id</th>
@@ -550,7 +550,7 @@ Using index for group-by:类似于访问表的Using index方式,Using index for 
 </tr>
 </table>
 ```
-#并发控制（锁）
+# 并发控制（锁）
 ## 一、MySQL中的锁（表锁、行锁） ##
 **背景：**
 当数据库中有多个操作需要修改同一数据时，不可避免的会产生数据的脏读。这时就需要数据库具有良好的并发控制能力，这一切在 MySQL 中都是由服务器和存储引擎来实现的。解决并发问题最有效的方案是引入了锁的机制，锁在功能上分为共享锁 (shared lock) 和排它锁 (exclusive lock) 即通常说的读锁和写锁。
@@ -634,17 +634,17 @@ MyISAM存储引擎的读和写锁是互斥的，读操作是串行的。那么�
     数据库的事务隔离级别越严格，并发副作用越小，但付出的代价也就越大，因为事务隔离实质上就是使事务在一定程度上“串行化”进行，这显然与“并发”是矛盾的，同时，不同的应用对读一致性和事务隔离程度的要求也是不同的，比如许多应用对“不可重复读”和“幻读”并不敏感，可能更关心数据并发访问的能力。
     为了解决“隔离”与“并发”的矛盾，ISO/ANSI SQL92定义了４个事务隔离级别，每个级别的隔离程度不同，允许出现的副作用也不同，应用可以根据自己业务逻辑要求，通过选择不同的隔离级别来平衡＂隔离＂与＂并发＂的矛盾
 **事务４种隔离级别比较**:
-
+```
 |隔离级别/读数据一致性及允许的并发副作用|	读数据一致性|	脏读	|不可重复读	|幻读|
 |:-:|:-:|:-:|:-:|:-:|
 |未提交读（Read uncommitted）|最低级别，只能保证不读取物理上损坏的数据|	是	|是|	是|
 |已提交读（Read committed）|	语句级|	否	|是	|是|
 |可重复读（Repeatable read）|	事务级	|否	|否	|是|
 |可序列化（Serializable）|	最高级别，事务级|	否|	否	|否|
-
+```
 **获取InonoD行锁争用情况**
 可以通过检查InnoDB_row_lock状态变量来分析系统上的行锁的争夺情况：
-
+```
 		mysql> show status like 'innodb_row_lock%';
 		+-------------------------------+-------+
 		| Variable_name | Value |
@@ -657,7 +657,7 @@ MyISAM存储引擎的读和写锁是互斥的，读操作是串行的。那么�
 		+-------------------------------+-------+
 		5 rows in set (0.00 sec) 
 
-   
+  ``` 
   如果发现争用比较严重，如Innodb_row_lock_waits和Innodb_row_lock_time_avg的值比较高，还可以通过设置InnoDB Monitors来进一步观察发生锁冲突的表、数据行等，并分析锁争用的原因。
 
 <h4>InnoDB的行锁模式及加锁方法</h4>
@@ -669,14 +669,14 @@ InnoDB实现了以下两种类型的行锁。
 **意向排他锁**（IX）：事务打算给数据行加排他锁，事务在给一个数据行加排他锁前必须先取得该表的IX锁。
 
 **InnoDB行锁模式兼容性列表**
-
+```
 |当前锁模式/是否兼容/请求锁模式|	X	|IX	|S	|IS|
 |:-:|:-:|:-:|:-:|:-:|
 |X	|冲突|	冲突	|冲突|	冲突|
 |IX|	冲突	|兼容|	冲突|	兼容|
 |S	|冲突	|冲突|	兼容|	兼容|
 |IS|	冲突	|兼容|	兼容|	兼容|
-
+```
  如果一个事务请求的锁模式与当前的锁兼容，InnoDB就请求的锁授予该事务；反之，如果两者两者不兼容，该事务就要等待锁释放。
     意向锁是InnoDB自动加的，不需用户干预。对于UPDATE、DELETE和INSERT语句，InnoDB会自动给涉及及数据集加排他锁（Ｘ）；对于普通SELECT语句，InnoDB会自动给涉及数据集加排他锁（Ｘ）；对于普通SELECT语句，InnoDB不会任何锁；事务可以通过以下语句显示给记录集加共享锁或排锁。
 共享锁（Ｓ）：SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE
@@ -735,18 +735,18 @@ UNLOCK TABLES;*
  Mysql事务处理
 ---------
 
-####1、概述：
+#### 1、概述：
 事务是一组原子性sql查询语句，被当作一个工作单元。若mysql对改事务单元内的所有sql语句都正常的执行完，则事务操作视为成功，所有的sql语句才对数据生效，若sql中任意不能执行或出错则事务操作失败，所有对数据的操作则无效（通过回滚恢复数据）。
 
 数据库引入事务的主要目的：事务会把数据库从一种一致状态转换为另一种一致状态。在数据库提交工作时，可以确保其要么所有修改都已经保存了，要么所有修改都不保存。
 
-####2、事务（Transaction）的 ACID 特性：
+#### 2、事务（Transaction）的 ACID 特性：
 **原子性 (atomicity)**: 事务中的所有操作要么全部提交成功，要么全部失败回滚。
 **一致性 (consistency)**: 数据库总是从一个一致性状态转换到另一个一致性状态。
 **隔离性 (isolation)**: 一个事务所做的修改在提交之前对其它事务是不可见的。
 **持久性 (durability)**: 一旦事务提交，其所做的修改便会永久保存在数据库中。
 
-####3、MYSQL事务处理的两种方式：
+#### 3、MYSQL事务处理的两种方式：
  1. 用begin,rollback,commit来实现
  开始：START TRANSACTION或BEGIN语句可以开始一项新的事务；推荐用START TRANSACTION 是SQL-99标准启动一个事务
  提交：COMMIT可以提交当前事务，是变更成为永久变更
@@ -765,7 +765,7 @@ set autocommit=1 开启自动提交
 
 	**注意：**当你结束这个事务的同时也开启了个新的事务！按第一种方法只将当前的作为一个事务！**推荐使用第一种方法！**
 
-####4、MYSQL事务的实现：
+#### 4、MYSQL事务的实现：
  1. Redo Log
 	 在InnoDB存储引擎中，事务日志是通过重做（redo）日志文件和InnoDB存储引擎的日志缓冲（InnoDB Log Buffer）来实现的。当开始一个事务的时候，会记录该事务的LSN (Log Sequence Number，日志序列号); 当事务执行时，会往InnoDB存储引擎的日志
  的日志缓存里面插入事务日志；当事务提交时，必须将InnoDB存储引擎的日志缓冲写入磁盘（通过innodb_flush_log_at_trx_commit来控制，默认的实现，即innodb_flush_log_at_trx_commit=1）。也就是写数据前，需要先写日志。这种方式称为“预写日志方式”（Write-Ahead Logging, WAL）。
@@ -775,7 +775,7 @@ set autocommit=1 开启自动提交
  2. Undo 
 	重做日志记录了事务的行为，可以很好地通过其进行“重做”。但是事务有时还需要撤销，这是就需要undo。undo与redo正好相反，对于数据库进行修改时，数据库不但会产生redo，而且还会产生一定量的undo，即使你执行的事务或语句由于某种原因失败了，或者如果你用一条ROLLBACk语句请求回滚，就可以利用这些undo信息将数据回滚到修改之前的样子。与redo不同的是，redo存放在重做日志文件中，undo存放在数据库内部的一个特殊段（segment）中，这称为undo段（undo segment），undo段位于共享表空间内。
 
-####5、事务的隔离级别
+#### 5、事务的隔离级别
 ANSI/ISO SQL标准定义了4中事务隔离级别：未提交读（read uncommitted），提交读（read committed），重复读（repeatable read），串行读（serializable）。
 
 对于不同的事务，采用不同的隔离级别分别有不同的结果。不同的隔离级别有不同的现象。主要有下面3种现在：
@@ -791,7 +791,7 @@ ANSI/ISO SQL标准定义了4中事务隔离级别：未提交读（read uncommit
 |repeatable read|||允许|
 |serializable||| |
 
-####6、设置事务的隔离级别
+#### 6、设置事务的隔离级别
 用户可以用SET TRANSACTION语句改变单个会话或者所有新进连接的隔离级别。它的语法如下：
 
 	SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL {READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE}
@@ -823,7 +823,7 @@ ANSI/ISO SQL标准定义了4中事务隔离级别：未提交读（read uncommit
 	+-----------------+
 	1 row in set (0.00 sec)
 	
-####7、数据库中的默认事务隔离级别
+#### 7、数据库中的默认事务隔离级别
 在Oracle中默认的事务隔离级别是提交读（read committed）。
 对于MySQL的Innodb的默认事务隔离级别是重复读（repeatable read）。可以通过下面的命令查看：		
 ```
@@ -903,7 +903,7 @@ SET TRANSACTION
 
 注：在应用程序中，最好的做法是把事务的START TRANSACTION 、COMMIT、ROLLBACK操作交给程序端来完成，而不是在存储过程内完成。
 	 	       
- #mysql分布式事务
+ # mysql分布式事务
  ## 分布式事务 ##
 
 ### 概述
