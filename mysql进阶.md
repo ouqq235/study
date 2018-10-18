@@ -314,55 +314,56 @@ MyISAM表支持空间索引，可以用做地理数据存储。和B-Tree索引�
  - 使用字段选择性高的的字段来建立索引
   show index from table 查看表上的索引。
 
-<table>
+	<table>
 <tr>
-<th>Table</th>
-<td>表的名称</td>
+	<th>Table</th>
+	<td>表的名称</td>
 </tr>
 <tr>
-<th>Non_unique</th>
-<td>如果索引不能包括重复词，则为0。如果可以，则为1。</td>
+	<th>Non_unique</th>
+	<td>如果索引不能包括重复词，则为0。如果可以，则为1。</td>
 </tr>
 <tr>
-<th>Key_name</th>
-<td>索引的名称。</td>
+	<th>Key_name</th>
+	<td>索引的名称。</td>
 </tr>
 <tr>
-<th>Seq_in_index</th>
-<td>索引中的列序列号，从1开始</td>
+	<th>Seq_in_index</th>
+	<td>索引中的列序列号，从1开始</td>
 </tr>
 <tr>
-<th>Column_name</th>
-<td>列名称。</td>
+	<th>Column_name</th>
+	<td>列名称。</td>
 </tr>
 <tr>
-<th>Collation</th>
-<td>列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。
+	<th>Collation</th>
+	<td>列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。
 </td>
 </tr>
 <tr>
-<th>Cardinality</th>
-<td>索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机会就越大</td>
+	<th>Cardinality</th>
+	<td>索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机会就越大</td>
 </tr>
 <tr>
-<th>Sub_part</th>
-<td>如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。</td>
+	<th>Sub_part</th>
+	<td>如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。</td>
 </tr>
 <tr>
-<th>Packed</th>
-<td>指示关键字如何被压缩。如果没有被压缩，则为NULL。</td>
+	<th>Packed</th>
+	<td>指示关键字如何被压缩。如果没有被压缩，则为NULL。</td>
 </tr>
 <tr>
-<th>Null</th>
-<td>如果列含有NULL，则含有YES。如果没有，则该列含有NO。
+	<th>Null</th>
+	<td>如果列含有NULL，则含有YES。如果没有，则该列含有NO。
 </td>
 </tr>
 <tr>
-<th>Index_type</th>
-<td>用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）。</td>
+	<th>Index_type</th>
+	<td>用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）。</td>
 </tr>
 </tbody>
-</table>
+	</table>
+
 索引选择性=索引列唯一值/表记录数；
 选择性较低索引 可能带来的性能问题
 选择性越高索引检索价值越高，消耗系统资源越少；选择性越低索引检索价值越低，消耗系统资源越多；
