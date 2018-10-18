@@ -221,7 +221,7 @@ Tips:
 
 ![enter image description here](http://a2.qpic.cn/psb?/V11ViYzL3kHi5M/Uatg0CC4yneic9U6cbjajFH5jrGv1V4YdGVbrfKuJuU!/b/dK8AAAAAAAAA&bo=cQOAAgAAAAAFB9Q!&rf=viewer_4 "date")
 Tips:
-1. 时间，年：year，日期：date，时间：尽量用timestamp类型更好
+时间，年：year，日期：date，时间：尽量用timestamp类型更好
 
 
 # 索引引进
@@ -280,7 +280,7 @@ InnoDb的聚簇索引实际上是在同一个结构中保存了B-Tree索引和�
 InnoDB使用的是聚簇索引，将主键组织到一棵B+树中，而行数据就储存在叶子节点上，若使用"where id = 14"这样的条件查找主键，则按照B+树的检索算法即可查找到对应的叶节点，之后获得行数据。若对Name列进行条件搜索，则需要两个步骤：第一步在辅助索引B+树中检索Name，到达其叶子节点获取对应的主键。第二步使用主键在主索引B+树种再执行一次B+树检索操作，最终到达叶子节点即可获取整行数据。
 MyISM使用的是非聚簇索引，非聚簇索引的两棵B+树看上去没什么不同，节点的结构完全一致只是存储的内容不同而已，主键索引B+树的节点存储了主键，辅助键索引B+树存储了辅助键。表数据存储在独立的地方，这两颗B+树的叶子节点都使用一个地址指向真正的表数据，对于表数据来说，这两个键没有任何差别。由于索引树是独立的，通过辅助键检索无需访问主键的索引树。
 为了更形象说明这两种索引的区别，我们假想一个表如下图存储了4行数据。其中Id作为主索引，Name作为辅助索引。图示清晰的显示了聚簇索引和非聚簇索引的差异。
-注：每个InnoDB引擎的表都有一个聚簇索引，除此之外的表上的每个非聚簇索引都是二级索引，又叫辅助索引（secondary indexes）。
+**注**：每个InnoDB引擎的表都有一个聚簇索引，除此之外的表上的每个非聚簇索引都是二级索引，又叫辅助索引（secondary indexes）。
 　　![enter image description here](http://a3.qpic.cn/psb?/V11ViYzL3kHi5M/OKMms4OawIMpb2bqU*XL3fW.DnnDQRJCRKjnkeJ4e9c!/b/dLAAAAAAAAAA&bo=wwKAAgAAAAADAGY!&rf=viewer_4 "64B59F1E-D02D-412B-B068-0FB360AF3C3D")
 
 
