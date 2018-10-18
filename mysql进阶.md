@@ -217,7 +217,7 @@ Tips:
 1. 对于定长的字符类型，比如密码MD5值等，建议用char类型
 2. 当列的最大长度比平均长度大很多，并且列很少更新的时候用vachar合适（碎片问题） 
 3. 用tinyint类型代替enum类型，enum如果需要新增枚举的话，得全表更新，set也不要用
-##日期和时间类型
+## 日期和时间类型
 
 ![enter image description here](http://a2.qpic.cn/psb?/V11ViYzL3kHi5M/Uatg0CC4yneic9U6cbjajFH5jrGv1V4YdGVbrfKuJuU!/b/dK8AAAAAAAAA&bo=cQOAAgAAAAAFB9Q!&rf=viewer_4 "date")
 Tips:
