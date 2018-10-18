@@ -408,8 +408,8 @@ MySQL查询分析器EXPLAIN或DESC
  explain select * from article a where a.author_id in (select author_id from user);   —— 表示select查询语句的查询计划
  
  - **每列的含义**
- ```html
-<table>
+
+	<table>
 <tr>
 <th>id</th>
 <td>SELECT识别符。这是SELECT的查询序列号</td>
@@ -548,8 +548,8 @@ Using where:WHERE 子句用于限制哪一个行匹配下一个表或发送到�
 Using sort_union(...), Using union(...), Using intersect(...):这些函数说明如何为index_merge联接类型合并索引扫描。<br/><br/>
 Using index for group-by:类似于访问表的Using index方式,Using index for group-by表示MySQL发现了一个索引,可以用来查 询GROUP BY或DISTINCT查询的所有列,而不要额外搜索硬盘访问实际的表。<br/><br/></td>
 </tr>
-</table>
-```
+	</table>
+
 # 并发控制（锁）
 ## 一、MySQL中的锁（表锁、行锁） ##
 **背景：**
