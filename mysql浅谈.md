@@ -197,7 +197,7 @@ Tips：
 ##字符串类型
 ![enter image description here](http://a3.qpic.cn/psb?/V11ViYzL3kHi5M/KsbPHRqo0VeeFPqLk1xB295uF.N0TuXJngEbchQeAr8!/b/dK0AAAAAAAAA&bo=5wOAAgAAAAAFB0I!&rf=viewer_4 "char")
  误区：
- char(size)和varcahr(size)里的size是指字符数长度，而非字节数，无论是中文，数字，字母，size只跟数量挂钩。例如char(5)最多可以存储5个中文汉字。而真正的存储字节数，看编码
+ char(size)和varcahr(size)里的size是指字符数长度，而非字节数，无论是中文，数字，字母，size只跟数量挂钩。例如char(5)最多可以存储5个中文汉字。
 ```
 mysql> create table test2(t1 char(5) CHARACTER SET utf8)CHARACTER SET utf8;
 Query OK, 0 rows affected (0.02 sec)
